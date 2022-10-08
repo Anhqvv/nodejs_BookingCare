@@ -25,8 +25,8 @@ let handleLoging = async (req, res) => {
 };
 
 let handleGetAllUsers = async (req, res) => {
-   let id = req.query.id
-   console.log("Nodejss handleGetAllUsers id: ", id);
+   let id = req.query.id;
+   // console.log("Nodejss handleGetAllUsers id: ", id);
    if (!id) {
       return res.status(500).json({
          errCode: 1,
@@ -43,7 +43,37 @@ let handleGetAllUsers = async (req, res) => {
    });
 };
 
+let handleCreateNewUser = async (req, res) => {
+   console.log("req.body", req.body);
+   let message = await userService.createNewUser(req.body);
+   console.log(message);
+   return res.status(200).json(message);
+};
+
+let handleDeleteUser = async (req, res) => {
+   let id = req.body.id;
+   if (!id) {
+      return req.status(200).json({
+         errCode: 1,
+         errMessage: "Missing require parameters",
+      });
+   }
+   console.log("delete User id", id);
+   let dataUser = await userService.deleteUser(id);
+   return res.status(200).json(dataUser);
+};
+
+let handleEditUser = async (req, res) => {
+   let data = req.body;
+   console.log('>>> Checking data from handleEditUser', data.id)
+   let dataUser = await userService.editUser(data);
+   // console.log('>>> Checking dataUser from handleEditUser', dataUser)
+   return res.status(200).json(dataUser);
+};
 module.exports = {
    handleLoging,
    handleGetAllUsers,
+   handleCreateNewUser,
+   handleDeleteUser,
+   handleEditUser,
 };
